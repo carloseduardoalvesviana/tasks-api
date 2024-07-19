@@ -2,33 +2,33 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\Task;
+use App\Services\TaskService;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
 
 class TaskController extends Controller
 {
+    public function __construct(
+        protected TaskService $taskService
+    ) {
+    }
+
     public function index()
     {
-        $tasks = Task::query()->where('user_id', auth()->id())->paginate();
+        $tasks = $this->taskService->getAll();
         return response()->json($tasks, 200);
     }
 
     public function store(CreateTaskRequest $request)
     {
-        $data = $request->all();
-        $data['user_id'] = auth()->id();
-        $task = Task::create($data);
+        $task = $this->taskService->createTask($request->all(), auth()->id());
         return response()->json($task, 201);
     }
 
     public function show($id)
     {
-        $task = Task::query()
-            ->where('id', $id)
-            ->where('user_id', auth()->id())
-            ->first();
+        $task = $this->taskService->getTask($id, auth()->id());
 
         if(!$task) {
             return response()->json(['message' => 'Not Found'], 404);
@@ -39,10 +39,7 @@ class TaskController extends Controller
 
     public function update(UpdateTaskRequest $request, $id)
     {
-        $task = Task::query()
-            ->where('id', $id)
-            ->where('user_id', auth()->id())
-            ->update($request->all());
+        $task = $this->taskService->updateTask($id, auth()->id(), $request->all());
 
         if(!$task) {
             return response()->json(['message' => 'Not Found'], 404);
@@ -53,10 +50,7 @@ class TaskController extends Controller
 
     public function destroy($id)
     {
-        $task = Task::query()
-            ->where('id', $id)
-            ->where('user_id', auth()->id())
-            ->delete();
+        $task = $this->taskService->deleteTask($id, auth()->id());
 
         if(!$task) {
             return response()->json(['message' => 'Not Found'], 404);
