@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Route;
 Route::post("/login", [AuthController::class, 'login']);
 Route::post("/register", [AuthController::class, 'register']);
 
+Route::post('/logout', [AuthController::class,'logout'])->middleware(['auth:sanctum']);
+
 Route::post('/tasks', [TaskController::class, 'store'])->middleware(['auth:sanctum']);
 Route::get('/tasks', [TaskController::class, 'index'])->middleware(['auth:sanctum']);
 Route::get('/tasks/{id}', [TaskController::class, 'show'])->middleware(['auth:sanctum']);
