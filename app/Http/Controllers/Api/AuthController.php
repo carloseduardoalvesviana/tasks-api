@@ -21,14 +21,14 @@ class AuthController extends Controller
         }
 
         if(!Hash::check($request->password, $user->password)) {
-            return response()->json(['message' => 'Invalid password'], 400);
+            return response()->json(['error' => 'Invalid password'], 400);
         }
 
         $user->tokens()->delete();
 
         $token = $user->createToken(Str::random(10))->plainTextToken;
 
-        return response()->json(['message' => $token], 200);
+        return response()->json(['token' => $token], 200);
     }
 
     public function register(RegisterRequest $request)
