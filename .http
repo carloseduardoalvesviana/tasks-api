@@ -1,0 +1,35 @@
+
+### Create New Task
+POST http://127.0.0.1:8000/api/tasks HTTP/1.1
+content-type: application/json
+Accept: application/json
+
+{
+    "title": "Estudar Laravel"
+}
+
+### Show Tasks
+GET http://127.0.0.1:8000/api/tasks HTTP/1.1
+content-type: application/json
+Accept: application/json
+
+### Show Task
+GET http://127.0.0.1:8000/api/tasks/1 HTTP/1.1
+content-type: application/json
+Accept: application/json
+
+### Update Task
+PUT http://127.0.0.1:8000/api/tasks/1 HTTP/1.1
+content-type: application/json
+Accept: application/json
+
+{
+    "title": "Estudar Laravel e Docker",
+    "description": "Estamos estudando!",
+    "completed": false
+}
+
+### Delete Task
+DELETE  http://127.0.0.1:8000/api/tasks/1 HTTP/1.1
+content-type: application/json
+Accept: application/json
